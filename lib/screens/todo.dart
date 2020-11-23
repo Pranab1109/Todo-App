@@ -1,11 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:todo/models/database_helper.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/todo_model.dart';
-import 'package:todo/models/totalTodo_model.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class TodoPage extends StatefulWidget {
@@ -90,6 +88,7 @@ class _TodoPageState extends State<TodoPage> {
               Theme(
                 data: ThemeData(primaryColor: Color(0xfff2a365)),
                 child: TextFormField(
+                  style: TextStyle(color: Color(0xffbbe1fa)),
                   // ignore: missing_return
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -156,56 +155,52 @@ class _TodoPageState extends State<TodoPage> {
                         fontWeight: FontWeight.w700,
                         color: Color(0xffbbe1fa)),
                   ),
-                  ScopedModelDescendant<TodoNumber>(
-                    builder: (_, child, model) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Total todo: ',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Color(0xffbbe1fa))),
-                              TextSpan(
-                                  text: '$totalTodo',
-                                  style: TextStyle(
-                                      color: Color(0xfff2a365),
-                                      fontWeight: FontWeight.bold)),
-                            ]),
-                          ),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Done: ',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Color(0xffbbe1fa))),
-                              TextSpan(
-                                  text: '$totalTodoDone',
-                                  style: TextStyle(
-                                      color: Color(0xfff2a365),
-                                      fontWeight: FontWeight.bold)),
-                            ]),
-                          ),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Remaining: ',
-                                  style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Color(0xffbbe1fa))),
-                              TextSpan(
-                                  text: '$totalTodoRem',
-                                  style: TextStyle(
-                                      color: Color(0xfff2a365),
-                                      fontWeight: FontWeight.bold)),
-                            ]),
-                          ),
-                        ],
-                      );
-                    },
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: 'Total todo: ',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Color(0xffbbe1fa))),
+                          TextSpan(
+                              text: '$totalTodo',
+                              style: TextStyle(
+                                  color: Color(0xfff2a365),
+                                  fontWeight: FontWeight.bold)),
+                        ]),
+                      ),
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: 'Done: ',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Color(0xffbbe1fa))),
+                          TextSpan(
+                              text: '$totalTodoDone',
+                              style: TextStyle(
+                                  color: Color(0xfff2a365),
+                                  fontWeight: FontWeight.bold)),
+                        ]),
+                      ),
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: 'Remaining: ',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Color(0xffbbe1fa))),
+                          TextSpan(
+                              text: '$totalTodoRem',
+                              style: TextStyle(
+                                  color: Color(0xfff2a365),
+                                  fontWeight: FontWeight.bold)),
+                        ]),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -262,6 +257,7 @@ class _TodoPageState extends State<TodoPage> {
                                             ? Text(
                                                 "${snapshot.data[index].title}",
                                                 style: TextStyle(
+                                                    fontSize: 20,
                                                     color: snapshot.data[index]
                                                                 .isDone ==
                                                             1
@@ -279,7 +275,7 @@ class _TodoPageState extends State<TodoPage> {
                                                                 .isDone ==
                                                             1
                                                         ? FontWeight.normal
-                                                        : FontWeight.w600),
+                                                        : FontWeight.bold),
                                               )
                                             : "Unnamed task".text.make(),
                                       ),
