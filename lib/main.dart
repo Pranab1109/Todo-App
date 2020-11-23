@@ -25,7 +25,6 @@ class _MyAppState extends State<MyApp> {
   int totalTodo;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getTotalTodo();
   }
@@ -33,7 +32,6 @@ class _MyAppState extends State<MyApp> {
   getTotalTodo() async {
     totalTodo = await _dbHelper.totalTodo(taskId);
     setState(() {});
-    print(totalTodo);
   }
 
   int taskId;

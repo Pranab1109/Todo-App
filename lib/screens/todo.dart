@@ -6,7 +6,6 @@ import 'package:todo/models/database_helper.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/todo_model.dart';
 import 'package:todo/models/totalTodo_model.dart';
-import 'package:todo/widgets/todo_card.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class TodoPage extends StatefulWidget {
@@ -25,6 +24,7 @@ class _TodoPageState extends State<TodoPage> {
   int totalTodoDone;
   int _taskId = 0;
   int rem;
+  //bool check;
 
   int totalTodoRem;
   @override
@@ -75,7 +75,6 @@ class _TodoPageState extends State<TodoPage> {
                         color: Color(0xffbbe1fa),
                       ),
                       onPressed: () {
-                        print(totalTodo);
                         Navigator.pop(context, totalTodo.toString());
                       }),
                   "${widget.task.title}"
@@ -225,22 +224,75 @@ class _TodoPageState extends State<TodoPage> {
                           itemBuilder: (context, index) {
                             totalTodo = snapshot.data.length;
                             return GestureDetector(
-                              onTap: () async {
-                                if (snapshot.data[index].isDone == 0) {
-                                  await _dbHelper.updateTodoDone(
-                                      snapshot.data[index].id, 1);
-                                } else {
-                                  await _dbHelper.updateTodoDone(
-                                      snapshot.data[index].id, 0);
-                                }
-                                setState(() {});
-                              },
-                              child: TodoCard(
-                                id: snapshot.data[index].id,
-                                isDone: snapshot.data[index].isDone,
-                                todoTitle: snapshot.data[index].title,
-                              ),
-                            );
+                                onTap: () async {
+                                  if (snapshot.data[index].isDone == 0) {
+                                    await _dbHelper.updateTodoDone(
+                                        snapshot.data[index].id, 1);
+                                  } else {
+                                    await _dbHelper.updateTodoDone(
+                                        snapshot.data[index].id, 0);
+                                  }
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      Theme(
+                                        data: ThemeData(
+                                            unselectedWidgetColor:
+                                                Colors.white),
+                                        child: Checkbox(
+                                            activeColor: Color(0xff222831),
+                                            value:
+                                                snapshot.data[index].isDone == 0
+                                                    ? false
+                                                    : true,
+                                            onChanged: (bool value) {
+                                              _dbHelper.updateTodoDone(
+                                                  snapshot.data[index].id,
+                                                  value == true ? 1 : 0);
+                                              totalTodosDone();
+                                              totalTodosRem();
+                                              setState(() {
+                                                // if (value) {
+                                                //   snapshot.data[index].isDone =
+                                                //       1;
+                                                // } else
+                                                //   snapshot.data[index].isDone =
+                                                //       0;
+                                              });
+                                            }),
+                                      ),
+                                      Flexible(
+                                        child: snapshot.data[index].title !=
+                                                null
+                                            ? Text(
+                                                "${snapshot.data[index].title}",
+                                                style: TextStyle(
+                                                    color: snapshot.data[index]
+                                                                .isDone ==
+                                                            1
+                                                        ? Vx.gray600
+                                                        : Color(0xfff2a365),
+                                                    decoration: snapshot
+                                                                .data[index]
+                                                                .isDone ==
+                                                            1
+                                                        ? TextDecoration
+                                                            .lineThrough
+                                                        : TextDecoration.none,
+                                                    fontWeight: snapshot
+                                                                .data[index]
+                                                                .isDone ==
+                                                            1
+                                                        ? FontWeight.normal
+                                                        : FontWeight.w600),
+                                              )
+                                            : "Unnamed task".text.make(),
+                                      ),
+                                    ],
+                                  ),
+                                ));
                           });
                     }),
               )
