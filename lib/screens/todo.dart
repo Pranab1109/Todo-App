@@ -253,14 +253,7 @@ class _TodoPageState extends State<TodoPage> {
                                                   value == true ? 1 : 0);
                                               totalTodosDone();
                                               totalTodosRem();
-                                              setState(() {
-                                                // if (value) {
-                                                //   snapshot.data[index].isDone =
-                                                //       1;
-                                                // } else
-                                                //   snapshot.data[index].isDone =
-                                                //       0;
-                                              });
+                                              setState(() {});
                                             }),
                                       ),
                                       Flexible(

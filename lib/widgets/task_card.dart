@@ -24,12 +24,6 @@ class _TaskCardState extends State<TaskCard> {
     } else {
       isdone = true;
     }
-
-    // if (this.mounted) {
-    //   setState(() {
-    //     totalTodos();
-    //   });
-    // }
   }
 
   @override
