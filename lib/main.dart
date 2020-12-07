@@ -8,6 +8,7 @@ import 'package:todo/screens/todo.dart';
 import 'package:todo/widgets/task_card.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'dart:ui';
+import 'package:liquid_swipe/liquid_swipe.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        brightness: Brightness.dark,
         textTheme: GoogleFonts.ralewayTextTheme(
           Theme.of(context).textTheme,
         ),
@@ -66,105 +68,113 @@ class _MyAppState extends State<MyApp> {
                   initialData: [],
                   future: _dbHelper.getTask(),
                   builder: (context, snapshot) {
-                    return ListView.builder(
-                      physics: BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        taskId = snapshot.data[index].id;
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        physics: BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) {
+                          taskId = snapshot.data[index].id;
 
-                        return Dismissible(
-                          confirmDismiss: (direction) {
-                            return promptUser(context);
-                          },
-                          key: UniqueKey(),
-                          onDismissed: (DismissDirection direction) async {
-                            Task newTask = snapshot.data[index];
-                            List<Todo> newTodo =
-                                await _dbHelper.getTodo(newTask.id);
-                            await _dbHelper.deleteTask(snapshot.data[index].id);
+                          return Dismissible(
+                            confirmDismiss: (direction) {
+                              return promptUser(context);
+                            },
+                            key: UniqueKey(),
+                            onDismissed: (DismissDirection direction) async {
+                              Task newTask = snapshot.data[index];
+                              List<Todo> newTodo =
+                                  await _dbHelper.getTodo(newTask.id);
+                              await _dbHelper
+                                  .deleteTask(snapshot.data[index].id);
 
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Vx.purple500,
-                                content: Row(
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Vx.purple500,
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Task deleted!',
+                                        style: TextStyle(
+                                            color: Vx.white,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  action: SnackBarAction(
+                                    label: 'Undo',
+                                    textColor: Vx.white,
+                                    onPressed: () async {
+                                      await _dbHelper.insertTask(newTask);
+                                      newTodo.forEach((element) async {
+                                        await _dbHelper.insertTodo(element);
+                                      });
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TodoPage(
+                                      task: snapshot.data[index],
+                                    ),
+                                  ),
+                                ).then((value) {
+                                  setState(() {});
+                                });
+                              },
+                              child: TaskCard(
+                                key: UniqueKey(),
+                                task: snapshot.data[index],
+                                totalTodo: totalTodo,
+                              ),
+                            ),
+                            background: Padding(
+                              padding: const EdgeInsets.all(4.50),
+                              child: Container(
+                                color: Vx.red500,
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Task deleted!',
-                                      style: TextStyle(
-                                          color: Vx.white,
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Icon(
+                                        Icons.delete_forever,
+                                        size: 30.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        Icons.delete_forever,
+                                        size: 30.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ],
                                 ),
-                                action: SnackBarAction(
-                                  label: 'Undo',
-                                  textColor: Vx.white,
-                                  onPressed: () async {
-                                    await _dbHelper.insertTask(newTask);
-                                    newTodo.forEach((element) async {
-                                      await _dbHelper.insertTodo(element);
-                                    });
-                                    setState(() {});
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TodoPage(
-                                    task: snapshot.data[index],
-                                  ),
-                                ),
-                              ).then((value) {
-                                setState(() {});
-                              });
-                            },
-                            child: TaskCard(
-                              key: UniqueKey(),
-                              task: snapshot.data[index],
-                              totalTodo: totalTodo,
-                            ),
-                          ),
-                          background: Padding(
-                            padding: const EdgeInsets.all(4.50),
-                            child: Container(
-                              color: Vx.red500,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Icon(
-                                      Icons.delete_forever,
-                                      size: 30.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(
-                                      Icons.delete_forever,
-                                      size: 30.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
+                    } else
+                      return Text(
+                        'Add your first task',
+                        style: TextStyle(color: Colors.white),
+                      );
                   }),
             ),
           ],

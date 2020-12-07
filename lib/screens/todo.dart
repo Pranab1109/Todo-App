@@ -68,7 +68,7 @@ class _TodoPageState extends State<TodoPage> {
                 children: [
                   IconButton(
                       icon: Icon(
-                        Icons.arrow_back_ios,
+                        Icons.arrow_back,
                         size: 24,
                         color: Color(0xffbbe1fa),
                       ),
