@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:todo/cooloors.dart';
 import 'package:todo/models/database_helper.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/todo_model.dart';
@@ -59,7 +60,7 @@ class _TodoPageState extends State<TodoPage> {
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Scaffold(
-        backgroundColor: Color(0xff222831),
+        backgroundColor: Cooloors.primaryColor1,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 50.0),
           child: Column(
@@ -70,25 +71,23 @@ class _TodoPageState extends State<TodoPage> {
                       icon: Icon(
                         Icons.arrow_back,
                         size: 24,
-                        color: Color(0xffbbe1fa),
+                        color: Cooloors.accentColor2,
                       ),
                       onPressed: () {
                         Navigator.pop(context, totalTodo.toString());
                       }),
-                  "${widget.task.title}"
-                      .text
-                      .bold
-                      .size(28)
-                      .textStyle(TextStyle(
-                        color: Color(0xffbbe1fa),
+                  Text(widget.task.title,
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ))
-                      .make(),
                 ],
               ),
               Theme(
-                data: ThemeData(primaryColor: Color(0xfff2a365)),
+                data: ThemeData(primaryColor: Cooloors.accentColor2),
                 child: TextFormField(
-                  style: TextStyle(color: Color(0xffbbe1fa)),
+                  style: TextStyle(color: Colors.white),
                   // ignore: missing_return
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -153,7 +152,7 @@ class _TodoPageState extends State<TodoPage> {
                     style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xffbbe1fa)),
+                        color: Colors.white),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -164,11 +163,11 @@ class _TodoPageState extends State<TodoPage> {
                               text: 'Total todo: ',
                               style: TextStyle(
                                   fontStyle: FontStyle.italic,
-                                  color: Color(0xffbbe1fa))),
+                                  color: Colors.white)),
                           TextSpan(
                               text: '$totalTodo',
                               style: TextStyle(
-                                  color: Color(0xfff2a365),
+                                  color: Cooloors.accentColor1,
                                   fontWeight: FontWeight.bold)),
                         ]),
                       ),
@@ -178,11 +177,11 @@ class _TodoPageState extends State<TodoPage> {
                               text: 'Done: ',
                               style: TextStyle(
                                   fontStyle: FontStyle.italic,
-                                  color: Color(0xffbbe1fa))),
+                                  color: Colors.white)),
                           TextSpan(
                               text: '$totalTodoDone',
                               style: TextStyle(
-                                  color: Color(0xfff2a365),
+                                  color: Cooloors.accentColor1,
                                   fontWeight: FontWeight.bold)),
                         ]),
                       ),
@@ -192,11 +191,11 @@ class _TodoPageState extends State<TodoPage> {
                               text: 'Remaining: ',
                               style: TextStyle(
                                   fontStyle: FontStyle.italic,
-                                  color: Color(0xffbbe1fa))),
+                                  color: Colors.white)),
                           TextSpan(
                               text: '$totalTodoRem',
                               style: TextStyle(
-                                  color: Color(0xfff2a365),
+                                  color: Cooloors.accentColor1,
                                   fontWeight: FontWeight.bold)),
                         ]),
                       ),
@@ -235,9 +234,13 @@ class _TodoPageState extends State<TodoPage> {
                                       Theme(
                                         data: ThemeData(
                                             unselectedWidgetColor:
-                                                Colors.white),
+                                                index % 2 == 0
+                                                    ? Cooloors.accentColor1
+                                                    : Cooloors.accentColor2),
                                         child: Checkbox(
-                                            activeColor: Color(0xff222831),
+                                            activeColor: index % 2 == 0
+                                                ? Cooloors.accentColor1
+                                                : Cooloors.accentColor2,
                                             value:
                                                 snapshot.data[index].isDone == 0
                                                     ? false
@@ -262,7 +265,7 @@ class _TodoPageState extends State<TodoPage> {
                                                                 .isDone ==
                                                             1
                                                         ? Vx.gray600
-                                                        : Color(0xfff2a365),
+                                                        : Colors.white,
                                                     decoration: snapshot
                                                                 .data[index]
                                                                 .isDone ==

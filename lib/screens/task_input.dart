@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/cooloors.dart';
 import 'package:todo/models/database_helper.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -29,7 +30,7 @@ class _TaskinputState extends State<Taskinput> {
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Scaffold(
-          backgroundColor: Color(0xff222831),
+          backgroundColor: Cooloors.primaryColor1,
           body: Padding(
             padding: const EdgeInsets.fromLTRB(16, 40, 16, 40),
             child: Column(
@@ -41,28 +42,28 @@ class _TaskinputState extends State<Taskinput> {
                         icon: Icon(
                           Icons.arrow_left_rounded,
                           size: 50,
-                          color: Color(0xfff2a365),
+                          color: Cooloors.accentColor1,
                         ),
                         onPressed: () {
                           Navigator.pop(context);
                         }),
                     Spacer(),
                     Center(
-                      child: "What's up next?"
-                          .text
-                          .bold
-                          .size(26.0)
-                          .textStyle(TextStyle(color: Color(0xfff2a365)))
-                          .make(),
-                    ),
+                        child: Text(
+                      "What's up next?",
+                      style:
+                          TextStyle(fontSize: 26, color: Cooloors.accentColor1),
+                    )),
                     Spacer(),
                   ],
                 ),
                 20.heightBox,
                 Theme(
-                  data: ThemeData(primaryColor: Color(0xfff2a365)),
+                  data: ThemeData(primaryColor: Cooloors.accentColor1),
                   child: TextFormField(
-                    style: TextStyle(color: Color(0xffbbe1fa)),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                     controller: titleEditor,
 
                     // ignore: missing_return
@@ -85,16 +86,16 @@ class _TaskinputState extends State<Taskinput> {
                         filled: true,
                         fillColor: Vx.purple100.withOpacity(0.3),
                         errorStyle: TextStyle(
-                            color: Vx.purple900,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 14)),
                   ).cornerRadius(16.0),
                 ),
                 20.heightBox,
                 Theme(
-                  data: ThemeData(primaryColor: Color(0xfff2a365)),
+                  data: ThemeData(primaryColor: Cooloors.accentColor1),
                   child: TextFormField(
-                    style: TextStyle(color: Color(0xffbbe1fa)),
+                    style: TextStyle(color: Colors.white),
                     controller: descriptionEditor,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
@@ -106,7 +107,7 @@ class _TaskinputState extends State<Taskinput> {
                         filled: true,
                         fillColor: Vx.purple100.withOpacity(0.3),
                         errorStyle: TextStyle(
-                            color: Vx.purple900,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 14)),
                   ).cornerRadius(16.0),
@@ -115,7 +116,7 @@ class _TaskinputState extends State<Taskinput> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Color(0xffbbe1fa),
+            backgroundColor: Cooloors.accentColor2,
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                 setState(() {
@@ -134,7 +135,7 @@ class _TaskinputState extends State<Taskinput> {
             },
             child: Icon(
               Icons.thumb_up_alt_outlined,
-              color: Color(0xff222831),
+              color: Colors.white,
             ),
             elevation: 3.0,
           ),
