@@ -79,10 +79,18 @@ class DatabaseHelper {
     await _db.rawDelete(("DELETE FROM Todo WHERE taskId='$id' "));
   }
 
-  // readTask() async {
-  //   Database _db = await database();
-  //   return await _db.query('Tasks');
-  // }
+  Future<int> totalTask() async {
+    Database _db = await database();
+    final result = await _db.rawQuery(("SELECT COUNT(*) FROM Tasks"));
+    return Sqflite.firstIntValue(result);
+  }
+
+  Future<int> totalTaskDone() async {
+    Database _db = await database();
+    final result =
+        await _db.rawQuery("SELECT COUNT(*) FROM Tasks WHERE isDone= '1' ");
+    return Sqflite.firstIntValue(result);
+  }
 
   Future<int> totalTodo(int id) async {
     Database _db = await database();

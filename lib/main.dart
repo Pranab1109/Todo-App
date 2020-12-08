@@ -22,14 +22,28 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DatabaseHelper _dbHelper = DatabaseHelper();
   int totalTodo;
+  int totalTask;
+  int totalTaskDone;
   @override
   void initState() {
     super.initState();
     getTotalTodo();
+    getTotalTask();
+    getTotalTaskDone();
   }
 
   getTotalTodo() async {
     totalTodo = await _dbHelper.totalTodo(taskId);
+    setState(() {});
+  }
+
+  getTotalTask() async {
+    totalTask = await _dbHelper.totalTask();
+    setState(() {});
+  }
+
+  getTotalTaskDone() async {
+    totalTaskDone = await _dbHelper.totalTaskDone();
     setState(() {});
   }
 
@@ -51,15 +65,6 @@ class _MyAppState extends State<MyApp> {
           title: "Todo App".text.make().centered(),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
-          // actions: [
-          //   IconButton(
-          //     icon: Icon(
-          //       Icons.info,
-          //       color: Colors.white,
-          //     ),
-          //     onPressed: () {},
-          //   )
-          // ],
         ),
         body: Column(
           children: [
@@ -73,17 +78,43 @@ class _MyAppState extends State<MyApp> {
                         children: [
                           SleekCircularSlider(
                             appearance: CircularSliderAppearance(
+                                infoProperties: InfoProperties(
+                                    bottomLabelStyle: TextStyle(
+                                        color: Colors.cyan,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                    topLabelStyle: TextStyle(
+                                        color: Colors.orange,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                    topLabelText: "Completed :",
+                                    mainLabelStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                    bottomLabelText:
+                                        totalTaskDone / totalTask * 100 != 100
+                                            ? "Keep Going!"
+                                            : "Well Done"),
                                 animationEnabled: true,
                                 customColors: CustomSliderColors(
+                                    dynamicGradient: true,
                                     progressBarColors: [
+                                      Colors.pink,
                                       Colors.white,
-                                      Colors.blue
-                                    ]),
-                                customWidths:
-                                    CustomSliderWidths(progressBarWidth: 10)),
+                                      Colors.blue,
+                                    ],
+                                    shadowColor: Colors.blue,
+                                    shadowMaxOpacity: 0.5),
+                                customWidths: CustomSliderWidths(
+                                  progressBarWidth: 12,
+                                  shadowWidth: 5.0,
+                                )),
                             min: 0,
                             max: 100,
-                            initialValue: 60,
+                            initialValue: totalTaskDone != null
+                                ? totalTaskDone / totalTask * 100
+                                : 0,
                           ),
                           Expanded(
                             child: ListView.builder(
@@ -133,11 +164,15 @@ class _MyAppState extends State<MyApp> {
                                               await _dbHelper
                                                   .insertTodo(element);
                                             });
+                                            getTotalTask();
+                                            getTotalTaskDone();
                                             setState(() {});
                                           },
                                         ),
                                       ),
                                     );
+                                    getTotalTask();
+                                    getTotalTaskDone();
                                     setState(() {});
                                   },
                                   child: InkWell(
@@ -150,13 +185,74 @@ class _MyAppState extends State<MyApp> {
                                           ),
                                         ),
                                       ).then((value) {
+                                        getTotalTask();
                                         setState(() {});
                                       });
                                     },
-                                    child: TaskCard(
+                                    child: Container(
                                       key: UniqueKey(),
-                                      task: snapshot.data[index],
-                                      totalTodo: totalTodo,
+                                      child: HStack([
+                                        Theme(
+                                          child: Checkbox(
+                                              activeColor: Color(0xff222831),
+                                              value:
+                                                  snapshot.data[index].isDone ==
+                                                          1
+                                                      ? true
+                                                      : false,
+                                              onChanged: (bool value) {
+                                                _dbHelper.updateTaskDone(
+                                                    snapshot.data[index].id,
+                                                    value == true ? 1 : 0);
+                                                getTotalTask();
+                                                getTotalTaskDone();
+                                                setState(() {});
+                                              }),
+                                          data: ThemeData(
+                                              unselectedWidgetColor:
+                                                  Colors.white),
+                                        ),
+                                        VStack(
+                                          [
+                                            Flexible(
+                                                child: Text(
+                                              snapshot.data[index].title,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: snapshot.data[index]
+                                                              .isDone ==
+                                                          1
+                                                      ? Vx.gray400
+                                                      : Color(0xffbbe1fa),
+                                                  decoration: snapshot
+                                                              .data[index]
+                                                              .isDone ==
+                                                          1
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : TextDecoration.none),
+                                            )),
+                                            10.heightBox,
+                                            Flexible(
+                                                child: Text(
+                                              snapshot.data[index].description,
+                                              style: TextStyle(
+                                                  color: snapshot.data[index]
+                                                              .isDone ==
+                                                          1
+                                                      ? Vx.gray600
+                                                      : Color(0xfff2a365)),
+                                            )),
+                                          ],
+                                          crossAlignment:
+                                              CrossAxisAlignment.start,
+                                        ).p12().expand(),
+                                        Icon(Icons.chevron_right_rounded)
+                                      ])
+                                          .backgroundColor(Color(0xff30475e))
+                                          .px12()
+                                          .py4(),
                                     ),
                                   ),
                                   background: Padding(
@@ -365,4 +461,86 @@ Future<bool> promptUser(BuildContext context) async {
             );
           }) ??
       false; // In case the user dismisses the dialog by clicking away from it
+}
+
+class TaskCard extends StatefulWidget {
+  final Task task;
+  int totalTodo;
+  TaskCard({Key key, this.task, this.totalTodo}) : super(key: key);
+
+  @override
+  _TaskCardState createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  int taskId;
+  DatabaseHelper dbHelper = DatabaseHelper();
+  bool isdone;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.task.isDone == 0) {
+      isdone = false;
+    } else {
+      isdone = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: UniqueKey(),
+      child: HStack([
+        Theme(
+          child: Checkbox(
+              activeColor: Color(0xff222831),
+              value: isdone,
+              onChanged: (bool value) {
+                dbHelper.updateTaskDone(widget.task.id, value == true ? 1 : 0);
+                setState(() {
+                  isdone = value;
+                });
+              }),
+          data: ThemeData(unselectedWidgetColor: Colors.white),
+        ),
+        VStack(
+          [
+            Flexible(
+              child: widget.task.title.text != null
+                  ? widget.task.title.text.bold
+                      .textStyle(
+                        TextStyle(
+                            color: isdone ? Vx.gray400 : Color(0xffbbe1fa),
+                            decoration: isdone
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none),
+                      )
+                      .size(20)
+                      .make()
+                  : "Unnamed task".text.make(),
+            ),
+            10.heightBox,
+            Flexible(
+              child: widget.task.description.text != null
+                  ? widget.task.description.text
+                      .textStyle(TextStyle(
+                          color: isdone ? Vx.gray600 : Color(0xfff2a365)))
+                      .size(16)
+                      .make()
+                  : SizedBox(
+                      height: 0.0,
+                    ),
+            ),
+          ],
+          crossAlignment: CrossAxisAlignment.start,
+        ).p12().expand(),
+        Icon(Icons.chevron_right_rounded)
+      ]).backgroundColor(Color(0xff30475e)).px12().py4(),
+    );
+  }
 }
