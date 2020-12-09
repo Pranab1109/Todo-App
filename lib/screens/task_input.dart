@@ -59,8 +59,12 @@ class _TaskinputState extends State<Taskinput> {
                 ),
                 20.heightBox,
                 Theme(
-                  data: ThemeData(primaryColor: Cooloors.accentColor1),
+                  data: ThemeData(
+                    primaryColor: Cooloors.accentColor1,
+                    cursorColor: Cooloors.accentColor1,
+                  ),
                   child: TextFormField(
+                    autofocus: true, cursorColor: Cooloors.accentColor1,
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -74,6 +78,7 @@ class _TaskinputState extends State<Taskinput> {
                     },
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
+                        focusColor: Cooloors.accentColor1,
 
                         // labelText: 'Title',
                         //alignLabelWithHint: false,
@@ -81,7 +86,10 @@ class _TaskinputState extends State<Taskinput> {
                         //helperText: ' ',
                         prefixIcon: Icon(Icons.text_fields_rounded),
                         hintText: 'Title',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'NerkoOne',
+                            fontSize: 20),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Vx.purple100.withOpacity(0.3),
@@ -95,6 +103,7 @@ class _TaskinputState extends State<Taskinput> {
                 Theme(
                   data: ThemeData(primaryColor: Cooloors.accentColor1),
                   child: TextFormField(
+                    cursorColor: Cooloors.accentColor1,
                     style: TextStyle(color: Colors.white),
                     controller: descriptionEditor,
                     textCapitalization: TextCapitalization.sentences,
@@ -102,7 +111,10 @@ class _TaskinputState extends State<Taskinput> {
                         contentPadding: EdgeInsets.only(top: 14.0),
                         prefixIcon: Icon(Icons.text_fields_rounded),
                         hintText: 'Task details',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'NerkoOne',
+                            fontSize: 20),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Vx.purple100.withOpacity(0.3),
@@ -135,7 +147,7 @@ class _TaskinputState extends State<Taskinput> {
             },
             child: Icon(
               Icons.thumb_up_alt_outlined,
-              color: Colors.white,
+              color: Cooloors.primaryColor1,
             ),
             elevation: 3.0,
           ),

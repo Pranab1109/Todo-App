@@ -85,9 +85,13 @@ class _TodoPageState extends State<TodoPage> {
                 ],
               ),
               Theme(
-                data: ThemeData(primaryColor: Cooloors.accentColor2),
+                data: ThemeData(
+                  primaryColor: Cooloors.accentColor2,
+                ),
                 child: TextFormField(
+                  cursorColor: Cooloors.accentColor1,
                   style: TextStyle(color: Colors.white),
+
                   // ignore: missing_return
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -110,12 +114,15 @@ class _TodoPageState extends State<TodoPage> {
                   },
                   controller: todoEditingController,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'NerkoOne',
+                        fontSize: 20),
                     errorStyle: TextStyle(
-                      fontSize: 14,
-                      color: Vx.red100,
-                      fontWeight: FontWeight.w700,
-                    ),
+                        fontSize: 18,
+                        color: Vx.red100,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'NerkoOne'),
                     fillColor: Vx.gray100.withOpacity(0.3),
                     filled: true,
                     border: InputBorder.none,
@@ -150,8 +157,8 @@ class _TodoPageState extends State<TodoPage> {
                   Text(
                     'Your Tasks : ',
                     style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 32.0,
+                        // fontWeight: FontWeight.w700,
                         color: Colors.white),
                   ),
                   Column(
@@ -163,12 +170,17 @@ class _TodoPageState extends State<TodoPage> {
                               text: 'Total todo: ',
                               style: TextStyle(
                                   fontStyle: FontStyle.italic,
-                                  color: Colors.white)),
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'NerkoOne')),
                           TextSpan(
                               text: '$totalTodo',
                               style: TextStyle(
-                                  color: Cooloors.accentColor1,
-                                  fontWeight: FontWeight.bold)),
+                                color: Cooloors.accentColor1,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: 'NerkoOne',
+                                fontSize: 16,
+                              )),
                         ]),
                       ),
                       RichText(
@@ -176,13 +188,19 @@ class _TodoPageState extends State<TodoPage> {
                           TextSpan(
                               text: 'Done: ',
                               style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.white)),
+                                fontStyle: FontStyle.italic,
+                                color: Colors.white,
+                                fontFamily: 'NerkoOne',
+                                fontSize: 16,
+                              )),
                           TextSpan(
                               text: '$totalTodoDone',
                               style: TextStyle(
-                                  color: Cooloors.accentColor1,
-                                  fontWeight: FontWeight.bold)),
+                                color: Cooloors.accentColor1,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: 'NerkoOne',
+                                fontSize: 16,
+                              )),
                         ]),
                       ),
                       RichText(
@@ -190,13 +208,19 @@ class _TodoPageState extends State<TodoPage> {
                           TextSpan(
                               text: 'Remaining: ',
                               style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.white)),
+                                fontStyle: FontStyle.italic,
+                                color: Colors.white,
+                                fontFamily: 'NerkoOne',
+                                fontSize: 16,
+                              )),
                           TextSpan(
                               text: '$totalTodoRem',
                               style: TextStyle(
-                                  color: Cooloors.accentColor1,
-                                  fontWeight: FontWeight.bold)),
+                                color: Cooloors.accentColor1,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: 'NerkoOne',
+                                fontSize: 16,
+                              )),
                         ]),
                       ),
                     ],
@@ -238,6 +262,7 @@ class _TodoPageState extends State<TodoPage> {
                                                     ? Cooloors.accentColor1
                                                     : Cooloors.accentColor2),
                                         child: Checkbox(
+                                            checkColor: Cooloors.primaryColor1,
                                             activeColor: index % 2 == 0
                                                 ? Cooloors.accentColor1
                                                 : Cooloors.accentColor2,
@@ -255,32 +280,28 @@ class _TodoPageState extends State<TodoPage> {
                                             }),
                                       ),
                                       Flexible(
-                                        child: snapshot.data[index].title !=
-                                                null
-                                            ? Text(
-                                                "${snapshot.data[index].title}",
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: snapshot.data[index]
-                                                                .isDone ==
-                                                            1
-                                                        ? Vx.gray600
-                                                        : Colors.white,
-                                                    decoration: snapshot
-                                                                .data[index]
-                                                                .isDone ==
-                                                            1
-                                                        ? TextDecoration
-                                                            .lineThrough
-                                                        : TextDecoration.none,
-                                                    fontWeight: snapshot
-                                                                .data[index]
-                                                                .isDone ==
-                                                            1
-                                                        ? FontWeight.normal
-                                                        : FontWeight.bold),
-                                              )
-                                            : "Unnamed task".text.make(),
+                                        child:
+                                            snapshot.data[index].title != null
+                                                ? Text(
+                                                    "${snapshot.data[index].title}",
+                                                    style: TextStyle(
+                                                      fontSize: 25,
+                                                      color: snapshot
+                                                                  .data[index]
+                                                                  .isDone ==
+                                                              1
+                                                          ? Vx.gray600
+                                                          : Colors.white,
+                                                      decoration: snapshot
+                                                                  .data[index]
+                                                                  .isDone ==
+                                                              1
+                                                          ? TextDecoration
+                                                              .lineThrough
+                                                          : TextDecoration.none,
+                                                    ),
+                                                  )
+                                                : "Unnamed task".text.make(),
                                       ),
                                     ],
                                   ),

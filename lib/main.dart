@@ -54,15 +54,14 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark,
-        textTheme: GoogleFonts.ralewayTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
+          brightness: Brightness.dark,
+          fontFamily: 'NerkoOne',
+          cursorColor: Cooloors.accentColor1),
       home: Scaffold(
         backgroundColor: Cooloors.primaryColor1,
         appBar: AppBar(
-          title: "Todo App".text.make().centered(),
+          title:
+              "Todo App".text.fontFamily('NerkoOne').size(30).make().centered(),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
         ),
@@ -83,32 +82,33 @@ class _MyAppState extends State<MyApp> {
                                       return ' $totalTaskDone / $totalTask';
                                     },
                                     bottomLabelStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
                                     topLabelStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
                                     topLabelText: "Completed :",
                                     mainLabelStyle: TextStyle(
-                                        color: Cooloors.accentColor1,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold),
+                                      color: Cooloors.accentColor1,
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                     bottomLabelText: totalTaskDone != totalTask
                                         ? "Keep Going!"
                                         : "All Done"),
                                 animationEnabled: true,
                                 customColors: CustomSliderColors(
-                                    dynamicGradient: true,
-                                    trackColor: Color(0xff373C40),
-                                    progressBarColor: Colors.white,
-                                    shadowColor: Colors.blue,
-                                    shadowMaxOpacity: 0.5),
+                                    dotColor: Cooloors.accentColor1,
+                                    trackColor: Cooloors.trackColor,
+                                    progressBarColor: Cooloors.accentColor1,
+                                    shadowColor: Cooloors.accentColor1,
+                                    shadowMaxOpacity: 0.0),
                                 customWidths: CustomSliderWidths(
                                   trackWidth: 12.0,
                                   progressBarWidth: 12,
-                                  shadowWidth: 5.0,
+                                  shadowWidth: 30.0,
                                 )),
                             min: 0,
                             max: totalTask + 0.0,
@@ -140,7 +140,7 @@ class _MyAppState extends State<MyApp> {
                                     Scaffold.of(context).showSnackBar(
                                       SnackBar(
                                         behavior: SnackBarBehavior.floating,
-                                        backgroundColor: Vx.purple500,
+                                        backgroundColor: Cooloors.accentColor1,
                                         content: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -148,15 +148,16 @@ class _MyAppState extends State<MyApp> {
                                             Text(
                                               'Task deleted!',
                                               style: TextStyle(
-                                                  color: Vx.white,
-                                                  fontSize: 20.0,
+                                                  color: Cooloors.primaryColor1,
+                                                  fontFamily: 'NerkoOne',
+                                                  fontSize: 26.0,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ],
                                         ),
                                         action: SnackBarAction(
                                           label: 'Undo',
-                                          textColor: Vx.white,
+                                          textColor: Cooloors.primaryColor1,
                                           onPressed: () async {
                                             await _dbHelper.insertTask(newTask);
                                             newTodo.forEach((element) async {
@@ -214,6 +215,8 @@ class _MyAppState extends State<MyApp> {
                                             children: [
                                               Theme(
                                                 child: Checkbox(
+                                                    checkColor:
+                                                        Cooloors.primaryColor1,
                                                     activeColor: index % 2 == 0
                                                         ? Cooloors.accentColor1
                                                         : Cooloors.accentColor2,
@@ -247,40 +250,61 @@ class _MyAppState extends State<MyApp> {
                                                       child: Text(
                                                     snapshot.data[index].title,
                                                     style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: snapshot
-                                                                    .data[index]
-                                                                    .isDone ==
-                                                                1
-                                                            ? Vx.gray400
-                                                            : Colors.white,
-                                                        decoration: snapshot
-                                                                    .data[index]
-                                                                    .isDone ==
-                                                                1
-                                                            ? TextDecoration
-                                                                .lineThrough
-                                                            : TextDecoration
-                                                                .none),
+                                                      fontSize: 25,
+                                                      // fontWeight:
+                                                      //     FontWeight.w700,
+                                                      color: snapshot
+                                                                  .data[index]
+                                                                  .isDone ==
+                                                              1
+                                                          ? Vx.gray600
+                                                          : Colors.white,
+                                                      decoration: snapshot
+                                                                  .data[index]
+                                                                  .isDone ==
+                                                              1
+                                                          ? TextDecoration
+                                                              .lineThrough
+                                                          : TextDecoration.none,
+                                                    ),
                                                   )),
-                                                  10.heightBox,
+                                                  8.heightBox,
                                                   Flexible(
-                                                      child: Text(
-                                                    snapshot.data[index]
-                                                        .description,
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: snapshot
-                                                                    .data[index]
-                                                                    .isDone ==
-                                                                1
-                                                            ? Vx.gray600
-                                                            : Colors.white),
-                                                  )),
+                                                    child: snapshot.data[index]
+                                                                .description !=
+                                                            ''
+                                                        ? Text(
+                                                            snapshot.data[index]
+                                                                .description,
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                // fontWeight:
+                                                                //     FontWeight.w900,
+                                                                color: snapshot
+                                                                            .data[
+                                                                                index]
+                                                                            .isDone ==
+                                                                        1
+                                                                    ? Vx.gray600
+                                                                    : Colors
+                                                                        .white),
+                                                          )
+                                                        : Text('...',
+                                                            style: TextStyle(
+                                                                letterSpacing:
+                                                                    5,
+                                                                fontSize: 16,
+                                                                // fontWeight:
+                                                                //     FontWeight.w900,
+                                                                color: snapshot
+                                                                            .data[
+                                                                                index]
+                                                                            .isDone ==
+                                                                        1
+                                                                    ? Vx.gray600
+                                                                    : Colors
+                                                                        .white)),
+                                                  ),
                                                 ],
                                                 crossAlignment:
                                                     CrossAxisAlignment.start,
@@ -288,8 +312,11 @@ class _MyAppState extends State<MyApp> {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     right: 8.0),
-                                                child: Icon(Icons
-                                                    .chevron_right_rounded),
+                                                child: Icon(
+                                                  Icons.chevron_right_rounded,
+                                                  color: Cooloors.accentColor1,
+                                                  size: 24,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -351,12 +378,10 @@ class _MyAppState extends State<MyApp> {
                               Text(
                                 'Add your tasks',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26),
+                                    color: Cooloors.accentColor1, fontSize: 32),
                               ),
                               Divider(
-                                color: Colors.white,
+                                color: Cooloors.accentColor1,
                                 thickness: 2.0,
                               ),
                               Row(
@@ -372,21 +397,23 @@ class _MyAppState extends State<MyApp> {
                                           text: 'Press on the  ',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 20),
+                                              fontFamily: 'NerkoOne',
+                                              fontSize: 25),
                                         ),
                                         TextSpan(
                                             text: '+  ',
                                             style: TextStyle(
-                                                fontSize: 26,
-                                                fontWeight: FontWeight.bold)),
+                                              fontSize: 30,
+                                              color: Cooloors.accentColor1,
+                                              fontFamily: 'NerkoOne',
+                                            )),
                                         TextSpan(
                                           text:
-                                              'button on the bottom to add task!',
+                                              'button at the bottom to add task!',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 20),
+                                              fontFamily: 'NerkoOne',
+                                              fontSize: 25),
                                         ),
                                       ]),
                                     ),
@@ -403,12 +430,31 @@ class _MyAppState extends State<MyApp> {
                                     width: 15,
                                   ),
                                   Expanded(
-                                    child: Text(
-                                      'Tap on your tasks to add more Sub-Tasks!',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20),
+                                    child: RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                          text: 'Tap  ',
+                                          style: TextStyle(
+                                              color: Cooloors.accentColor1,
+                                              fontFamily: 'NerkoOne',
+                                              fontSize: 25),
+                                        ),
+                                        TextSpan(
+                                            text: 'on your task to add more  ',
+                                            style: TextStyle(
+                                              fontSize: 25,
+                                              color: Colors.white,
+                                              fontFamily: 'NerkoOne',
+                                            )),
+                                        TextSpan(
+                                          text: 'sub-tasks!',
+                                          style: TextStyle(
+                                              color: Cooloors.accentColor1,
+                                              fontFamily: 'NerkoOne',
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 25),
+                                        ),
+                                      ]),
                                     ),
                                   ),
                                 ],
@@ -423,12 +469,23 @@ class _MyAppState extends State<MyApp> {
                                     width: 15,
                                   ),
                                   Expanded(
-                                    child: Text(
-                                      'Swipe to delete your task!',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20),
+                                    child: RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                          text: 'Swipe to delete  ',
+                                          style: TextStyle(
+                                              color: Cooloors.accentColor1,
+                                              fontFamily: 'NerkoOne',
+                                              fontSize: 25),
+                                        ),
+                                        TextSpan(
+                                            text: 'your task',
+                                            style: TextStyle(
+                                              fontSize: 25,
+                                              color: Colors.white,
+                                              fontFamily: 'NerkoOne',
+                                            )),
+                                      ]),
                                     ),
                                   ),
                                 ],
@@ -454,7 +511,13 @@ class _MyAppState extends State<MyApp> {
               });
             },
             backgroundColor: Cooloors.accentColor2,
-            child: Icon(Icons.add, color: Colors.white),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                '+',
+                style: TextStyle(color: Cooloors.primaryColor1, fontSize: 45),
+              ),
+            ),
           ),
         ),
       ),
@@ -471,8 +534,11 @@ Future<bool> promptUser(BuildContext context) async {
               backgroundColor: Colors.white70,
               content: Text(
                 "Are you sure you want to Delete?",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 26,
+                  fontFamily: 'NerkoOne',
+                ),
               ),
               actions: <Widget>[
                 ButtonBar(
@@ -484,14 +550,24 @@ Future<bool> promptUser(BuildContext context) async {
                       child: Text(
                         "Delete",
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: 'NerkoOne',
+                        ),
                       ),
                       onPressed: () {
                         Navigator.of(context).pop(true);
                       },
                     ),
                     new RaisedButton(
-                      child: Text('Cancel'),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: 'NerkoOne',
+                        ),
+                      ),
                       onPressed: () {
                         return Navigator.of(context).pop(false);
                       },
