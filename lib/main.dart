@@ -5,9 +5,7 @@ import 'package:todo/models/task_model.dart';
 import 'package:todo/models/todo_model.dart';
 import 'package:todo/screens/task_input.dart';
 import 'package:todo/screens/todo.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'dart:ui';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'cooloors.dart';
 
 void main() {
@@ -60,8 +58,7 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         backgroundColor: Cooloors.primaryColor1,
         appBar: AppBar(
-          title:
-              "Todo App".text.fontFamily('NerkoOne').size(30).make().centered(),
+          title: Text("Todo App"),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
         ),
@@ -75,46 +72,48 @@ class _MyAppState extends State<MyApp> {
                     if (snapshot.data.length != 0) {
                       return Column(
                         children: [
-                          SleekCircularSlider(
-                            appearance: CircularSliderAppearance(
-                                infoProperties: InfoProperties(
-                                    modifier: (value) {
-                                      return ' $totalTaskDone / $totalTask';
-                                    },
-                                    bottomLabelStyle: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                    topLabelStyle: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                    topLabelText: "Completed :",
-                                    mainLabelStyle: TextStyle(
-                                      color: Cooloors.accentColor1,
-                                      fontSize: 34,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    bottomLabelText: totalTaskDone != totalTask
-                                        ? "Keep Going!"
-                                        : "All Done"),
-                                animationEnabled: true,
-                                customColors: CustomSliderColors(
-                                    dotColor: Cooloors.accentColor1,
-                                    trackColor: Cooloors.trackColor,
-                                    progressBarColor: Cooloors.accentColor1,
-                                    shadowColor: Cooloors.accentColor1,
-                                    shadowMaxOpacity: 0.0),
-                                customWidths: CustomSliderWidths(
-                                  trackWidth: 12.0,
-                                  progressBarWidth: 12,
-                                  shadowWidth: 30.0,
-                                )),
-                            min: 0,
-                            max: totalTask + 0.0,
-                            initialValue:
-                                totalTaskDone != null ? totalTaskDone + 0.0 : 0,
-                          ),
+                          // (totalTask != 0 && totalTaskDone != 0) ??
+
+                          // SleekCircularSlider(
+                          //   appearance: CircularSliderAppearance(
+                          //       infoProperties: InfoProperties(
+                          //           modifier: (value) {
+                          //             return ' $totalTaskDone / $totalTask';
+                          //           },
+                          //           bottomLabelStyle: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 20,
+                          //           ),
+                          //           topLabelStyle: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 20,
+                          //           ),
+                          //           topLabelText: "Completed :",
+                          //           mainLabelStyle: TextStyle(
+                          //             color: Cooloors.accentColor1,
+                          //             fontSize: 34,
+                          //             fontWeight: FontWeight.bold,
+                          //           ),
+                          //           bottomLabelText: totalTaskDone != totalTask
+                          //               ? "Keep Going!"
+                          //               : "All Done"),
+                          //       animationEnabled: true,
+                          //       customColors: CustomSliderColors(
+                          //           dotColor: Cooloors.accentColor1,
+                          //           trackColor: Cooloors.trackColor,
+                          //           progressBarColor: Cooloors.accentColor1,
+                          //           shadowColor: Cooloors.accentColor1,
+                          //           shadowMaxOpacity: 0.0),
+                          //       customWidths: CustomSliderWidths(
+                          //         trackWidth: 12.0,
+                          //         progressBarWidth: 12,
+                          //         shadowWidth: 30.0,
+                          //       )),
+                          //   min: 0,
+                          //   max: totalTask + 0.0,
+                          //   initialValue:
+                          //       totalTaskDone != null ? totalTaskDone + 0.0 : 0,
+                          // ),
                           Expanded(
                             child: ListView.builder(
                               physics: BouncingScrollPhysics(
@@ -130,12 +129,13 @@ class _MyAppState extends State<MyApp> {
                                   key: UniqueKey(),
                                   onDismissed:
                                       (DismissDirection direction) async {
+                                    await _dbHelper
+                                        .deleteTask(snapshot.data[index].id);
                                     Scaffold.of(context).hideCurrentSnackBar();
+
                                     Task newTask = snapshot.data[index];
                                     List<Todo> newTodo =
                                         await _dbHelper.getTodo(newTask.id);
-                                    await _dbHelper
-                                        .deleteTask(snapshot.data[index].id);
 
                                     Scaffold.of(context).showSnackBar(
                                       SnackBar(
@@ -212,111 +212,129 @@ class _MyAppState extends State<MyApp> {
                                             //     end: Alignment.bottomRight),
                                           ),
                                           child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Theme(
-                                                child: Checkbox(
-                                                    checkColor:
-                                                        Cooloors.primaryColor1,
-                                                    activeColor: index % 2 == 0
-                                                        ? Cooloors.accentColor1
-                                                        : Cooloors.accentColor2,
-                                                    value: snapshot.data[index]
-                                                                .isDone ==
-                                                            1
-                                                        ? true
-                                                        : false,
-                                                    onChanged: (bool value) {
-                                                      _dbHelper.updateTaskDone(
-                                                          snapshot
-                                                              .data[index].id,
-                                                          value == true
-                                                              ? 1
-                                                              : 0);
-                                                      getTotalTask();
-                                                      getTotalTaskDone();
-                                                      setState(() {});
-                                                    }),
-                                                data: ThemeData(
-                                                    unselectedWidgetColor:
-                                                        index % 2 == 0
+                                              Row(
+                                                children: [
+                                                  Theme(
+                                                    child: Checkbox(
+                                                        checkColor: Cooloors
+                                                            .primaryColor1,
+                                                        activeColor: index %
+                                                                    2 ==
+                                                                0
                                                             ? Cooloors
                                                                 .accentColor1
                                                             : Cooloors
-                                                                .accentColor2),
-                                              ),
-                                              VStack(
-                                                [
-                                                  Flexible(
-                                                      child: Text(
-                                                    snapshot.data[index].title,
-                                                    style: TextStyle(
-                                                      fontSize: 25,
-                                                      // fontWeight:
-                                                      //     FontWeight.w700,
-                                                      color: snapshot
+                                                                .accentColor2,
+                                                        value: snapshot
+                                                                    .data[index]
+                                                                    .isDone ==
+                                                                1
+                                                            ? true
+                                                            : false,
+                                                        onChanged:
+                                                            (bool value) {
+                                                          _dbHelper
+                                                              .updateTaskDone(
+                                                                  snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .id,
+                                                                  value == true
+                                                                      ? 1
+                                                                      : 0);
+                                                          getTotalTask();
+                                                          getTotalTaskDone();
+                                                          setState(() {});
+                                                        }),
+                                                    data: ThemeData(
+                                                        unselectedWidgetColor:
+                                                            index % 2 == 0
+                                                                ? Cooloors
+                                                                    .accentColor1
+                                                                : Cooloors
+                                                                    .accentColor2),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        snapshot
+                                                            .data[index].title,
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                          // fontWeight:
+                                                          //     FontWeight.w700,
+                                                          color: snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .isDone ==
+                                                                  1
+                                                              ? Colors
+                                                                  .grey.shade600
+                                                              : Colors.white,
+                                                          decoration: snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .isDone ==
+                                                                  1
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : TextDecoration
+                                                                  .none,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 8,
+                                                      ),
+                                                      snapshot.data[index]
+                                                                  .description !=
+                                                              ''
+                                                          ? Text(
+                                                              snapshot
                                                                   .data[index]
-                                                                  .isDone ==
-                                                              1
-                                                          ? Vx.gray600
-                                                          : Colors.white,
-                                                      decoration: snapshot
-                                                                  .data[index]
-                                                                  .isDone ==
-                                                              1
-                                                          ? TextDecoration
-                                                              .lineThrough
-                                                          : TextDecoration.none,
-                                                    ),
-                                                  )),
-                                                  8.heightBox,
-                                                  Flexible(
-                                                    child: snapshot.data[index]
-                                                                .description !=
-                                                            ''
-                                                        ? Text(
-                                                            snapshot.data[index]
-                                                                .description,
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                // fontWeight:
-                                                                //     FontWeight.w900,
-                                                                color: snapshot
-                                                                            .data[
-                                                                                index]
-                                                                            .isDone ==
-                                                                        1
-                                                                    ? Vx.gray600
-                                                                    : Colors
-                                                                        .white),
-                                                          )
-                                                        : Text('...',
-                                                            style: TextStyle(
-                                                                letterSpacing:
-                                                                    5,
-                                                                fontSize: 16,
-                                                                // fontWeight:
-                                                                //     FontWeight.w900,
-                                                                color: snapshot
-                                                                            .data[
-                                                                                index]
-                                                                            .isDone ==
-                                                                        1
-                                                                    ? Vx.gray600
-                                                                    : Colors
-                                                                        .white)),
+                                                                  .description,
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  // fontWeight:
+                                                                  //     FontWeight.w900,
+                                                                  color: snapshot
+                                                                              .data[
+                                                                                  index]
+                                                                              .isDone ==
+                                                                          1
+                                                                      ? Colors
+                                                                          .grey
+                                                                          .shade600
+                                                                      : Colors
+                                                                          .white),
+                                                            )
+                                                          : Text('...',
+                                                              style: TextStyle(
+                                                                  letterSpacing:
+                                                                      5,
+                                                                  fontSize: 16,
+                                                                  // fontWeight:
+                                                                  //     FontWeight.w900,
+                                                                  color: snapshot
+                                                                              .data[
+                                                                                  index]
+                                                                              .isDone ==
+                                                                          1
+                                                                      ? Colors
+                                                                          .grey
+                                                                          .shade600
+                                                                      : Colors
+                                                                          .white)),
+                                                    ],
                                                   ),
                                                 ],
-                                                crossAlignment:
-                                                    CrossAxisAlignment.start,
-                                              ).p12().expand(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 8.0),
-                                                child: Icon(
-                                                  Icons.chevron_right_rounded,
-                                                  color: Cooloors.accentColor1,
-                                                  size: 24,
-                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.chevron_right_rounded,
+                                                color: Cooloors.accentColor1,
+                                                size: 24,
                                               ),
                                             ],
                                           ),
@@ -327,7 +345,7 @@ class _MyAppState extends State<MyApp> {
                                   background: Padding(
                                     padding: const EdgeInsets.all(4.50),
                                     child: Container(
-                                      color: Vx.red500,
+                                      color: Colors.red.shade600,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,

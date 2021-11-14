@@ -5,7 +5,6 @@ import 'package:todo/cooloors.dart';
 import 'package:todo/models/database_helper.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/todo_model.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class TodoPage extends StatefulWidget {
   final Task task;
@@ -120,10 +119,10 @@ class _TodoPageState extends State<TodoPage> {
                         fontSize: 20),
                     errorStyle: TextStyle(
                         fontSize: 18,
-                        color: Vx.red100,
+                        color: Colors.red.shade600,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'NerkoOne'),
-                    fillColor: Vx.gray100.withOpacity(0.3),
+                    fillColor: Colors.grey.shade100.withOpacity(0.3),
                     filled: true,
                     border: InputBorder.none,
                     hintText: "What to do?",
@@ -145,12 +144,14 @@ class _TodoPageState extends State<TodoPage> {
                       },
                     ),
                   ),
-                ).cornerRadius(16.0),
+                ),
               ),
               /*TodoCard(
                 todo: todo == null ? "" : "$todo",
               ),*/
-              20.heightBox,
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -290,7 +291,7 @@ class _TodoPageState extends State<TodoPage> {
                                                                   .data[index]
                                                                   .isDone ==
                                                               1
-                                                          ? Vx.gray600
+                                                          ? Colors.grey.shade600
                                                           : Colors.white,
                                                       decoration: snapshot
                                                                   .data[index]
@@ -301,7 +302,7 @@ class _TodoPageState extends State<TodoPage> {
                                                           : TextDecoration.none,
                                                     ),
                                                   )
-                                                : "Unnamed task".text.make(),
+                                                : Text("Unnamed Task"),
                                       ),
                                     ],
                                   ),

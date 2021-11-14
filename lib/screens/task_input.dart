@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo/cooloors.dart';
 import 'package:todo/models/database_helper.dart';
 import 'package:todo/models/task_model.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class Taskinput extends StatefulWidget {
   @override
@@ -57,7 +56,9 @@ class _TaskinputState extends State<Taskinput> {
                     Spacer(),
                   ],
                 ),
-                20.heightBox,
+                SizedBox(
+                  height: 20,
+                ),
                 Theme(
                   data: ThemeData(
                     primaryColor: Cooloors.accentColor1,
@@ -92,14 +93,16 @@ class _TaskinputState extends State<Taskinput> {
                             fontSize: 20),
                         border: InputBorder.none,
                         filled: true,
-                        fillColor: Vx.purple100.withOpacity(0.3),
+                        fillColor: Colors.purple.shade100.withOpacity(0.3),
                         errorStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 14)),
-                  ).cornerRadius(16.0),
+                  ),
                 ),
-                20.heightBox,
+                SizedBox(
+                  height: 20,
+                ),
                 Theme(
                   data: ThemeData(primaryColor: Cooloors.accentColor1),
                   child: TextFormField(
@@ -117,12 +120,12 @@ class _TaskinputState extends State<Taskinput> {
                             fontSize: 20),
                         border: InputBorder.none,
                         filled: true,
-                        fillColor: Vx.purple100.withOpacity(0.3),
+                        fillColor: Colors.purple.shade100.withOpacity(0.3),
                         errorStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 14)),
-                  ).cornerRadius(16.0),
+                  ),
                 ),
               ],
             ),
